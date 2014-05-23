@@ -12,8 +12,10 @@ if (is_array($last_run)) {
 }
 
 $curr     = time();
-if (($curr - $last_run) > 18000) {
+$run_cron = ($curr - $last_run);
+if ($run_cron >= 60) {
   cron();
+  $run_cron = 1;
   set_log('last-run', $curr);
   $last_run = $curr;
 }
@@ -28,9 +30,9 @@ $listings = array(
 $issues     = get_log('issues');
 $processed  = get_log('processed');
 ?>
-
+<input type="hidden" name="cron_run" value="<?php echo $run_cron; ?>" />
 <h1>Contributors to "<?php echo $tag; ?>" Issues</h1>
-<span>last updated: <i><?php echo @date('m/d/y H:i:s', $curr); ?></i></span>
+<span>last updated: <i><?php echo @date('m/d/y H:i:s', $last_run); ?></i></span>
 <br />
 
 <?php foreach($listings as $count => $title): ?>
