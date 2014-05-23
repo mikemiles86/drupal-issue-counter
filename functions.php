@@ -50,7 +50,7 @@ function fetch_issues() {
 
   $issues = FALSE;
 
-  $url = 'https://drupal.org/project/issues/search/rss?order=created&sort=desc&issue_tags=' . $tag;
+  $url = 'https://drupal.org/project/issues/search/rss?order=last_comment_timestamp&sort=desc&issue_tags=' . $tag;
 
   if ($data = simplexml_load_file($url)){
     $data = (array)$data;

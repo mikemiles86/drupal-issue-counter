@@ -6,8 +6,18 @@ $tag = 'SprintWeekend2014';
 $rank_limit = 5;
 $batch_size = 10;
 
+$last_run = get_log('last-run');
+if (is_array($last_run)) {
+  $last_run = 0;
+}
 
-cron();
+$curr     = time();
+if (($curr - $last_run) > 18000) {
+  cron();
+  set_log('last-run', $curr);
+  $last_run = $curr;
+}
+
 $user_list  = rank_users();
 $listings = array(
   3 => 'Top 3',
@@ -20,7 +30,7 @@ $processed  = get_log('processed');
 ?>
 
 <h1>Contributors to "<?php echo $tag; ?>" Issues</h1>
-<span>last updated: <i><?php echo @date('m/d/y H:i:s'); ?></i></span>
+<span>last updated: <i><?php echo @date('m/d/y H:i:s', $curr); ?></i></span>
 <br />
 
 <?php foreach($listings as $count => $title): ?>
@@ -44,5 +54,3 @@ $processed  = get_log('processed');
 <?php endforeach; ?>
 </ul>
 <br />
-
-
